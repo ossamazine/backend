@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - user-service
+      - localstack
+    environment:
+      - USER_SERVICE_URL=http://user-service:8001
+      - AWS_ENDPOINT_URL=http://localstack:4566  # URL pour LocalStack
+      - AWS_ACCESS_KEY_ID=fakeAccessKey          # Credentials fictifs pour LocalStack
+      - AWS_SECRET_ACCESS_KEY=fakeSecretKey
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    ports:
+      - "8001:8001"
+    depends_on:
+      - localstack
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=fakeAccessKey
+      - AWS_SECRET_ACCESS_KEY=fakeSecretKey
+
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"  # Port pour tous les services AWS simulés
+      - "4510-4559:4510-4559"  # Ports pour des services comme Lambda
+    environment:
+      - SERVICES=s3,dynamodb,lambda  # Activer les services AWS simulés nécessaires
+      - DEBUG=1
