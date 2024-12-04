@@ -15,8 +15,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY user-service/ .
 # Assurez-vous que tous les fichiers sont dans ce dossier
 
-# Étape 6: Exposer le port 8001
+# Étape 6: Copier le dossier des tests (s'il existe)
+COPY tests /app/tests
+# Assurez-vous que le dossier 'tests' est bien dans votre répertoire local
+
+# Étape 7: Exposer le port 8000 (ou 8001 si c'est celui que vous utilisez)
 EXPOSE 8001
 
-# Étape 7: Lancer l'application avec Uvicorn
+# Étape 8: Lancer l'application avec Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
