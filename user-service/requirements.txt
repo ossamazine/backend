@@ -3,3 +3,4 @@
 fastapi
 boto3
 uvicorn[gunicorn]
+pytest # Ajout de pytest pour les tests
