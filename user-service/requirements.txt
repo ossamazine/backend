@@ -1,0 +1,5 @@
+# user-service/requirements.txt
+
+fastapi
+boto3
+uvicorn[gunicorn]
